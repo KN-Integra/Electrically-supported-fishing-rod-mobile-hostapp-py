@@ -62,7 +62,7 @@ class CmdScreen(Screen):
     def template_add_callback(self, task):
         # add_button = self.ids.new_template
         self.ids.new_template_name.text = ""
-        self.update_templates_grid()
+        self.templates_update()
         # add_button.ids.new_template_speed.
 
     def update_templates_grid(self, *args):
@@ -130,5 +130,5 @@ class CmdScreen(Screen):
         return (
             len(name) > 0
             and len(name) < MAX_NAME_LENGTH
-            and bool(re.match("^[a-zA-Z]+$", name))
+            and bool(re.match("^[a-zA-Z0-9]+$", name))
         )
