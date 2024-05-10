@@ -9,14 +9,14 @@
             pos: self.pos
             size: self.size
 
-    BoxLayout:
+    MDBoxLayout:
         width: root.width
         height: root.height
         orientation: "vertical"
         spacing: "20dp"
         padding: "30dp"
 
-        BoxLayout:
+        MDBoxLayout:
             orientation: "horizontal"
             size_hint: [1, 0.1]
             spacing: root.width // 2 if root.width > 600 else root.width // 3
@@ -32,11 +32,11 @@
                 fit_mode: "contain"
                 size_hint_y: None
 
-        ScrollView:
+        MDScrollView:
             id: templates_view
             size_hint: [1, 0.5]
 
-            GridLayout:
+            MDGridLayout:
                 id: templates_grid
                 cols: 2 
                 # TODO this should work, but apparently it does not
@@ -46,22 +46,23 @@
                 spacing: "15dp"
 
         MDRectangleFlatButton:
+            size_hint: [1, 0.1]
             id: speed_label
             text: "Current speed: "
             on_release: root.speed_get()
 
-            font_size: "25dp"
+            font_size: "20dp"
 
-            padding: "25dp"
-            width: root.width - 60
-
+            padding: "20dp"
+            width: root.width - 150
+            margin: 0
             line_width: 2
             line_color: utils.rgba("#a18072")
 
             theme_text_color: "Custom"
             text_color: app.theme_cls.text_color
 
-        BoxLayout:
+        MDBoxLayout:
             orientation: "horizontal"
             id: new_template
 
@@ -71,11 +72,18 @@
             MDTextField:
                 id: new_template_name
 
+                mode: "rectangle"
                 hint_text: "Enter name"
                 input_type: "text"
+                max_text_length: 20
+
+                helper_text_mode: "on_error"
+                helper_text: "Enter only latin letter with a maximum length of 20 chacters"
 
             MDTextField:
                 id: new_template_speed
+                
+                mode: "rectangle"
                 hint_text: "31999"
                 input_type: "number"
 
@@ -87,18 +95,20 @@
 
         MDBoxLayout:
             orientation: "horizontal"
-            size_hint_y: None
+            # size_hint_y: None
+            size_hint: [1, 0.1]
+            spacing: "15dp"
+
             
             MDRectangleFlatButton:
                 text: "Bootloader"
                 on_release: root.enter_bootloader()
                 disabled: self.state == "normal"
 
-                font_size: "20dp"
-
-                padding: "25dp"
-                width: root.width - 60
-                size_hint_x: 0.6
+                font_size: "15dp"
+                padding: "15dp"
+                # width: root.width - 60
+                size_hint_x: 0.5
 
                 line_width: 2
                 line_color: app.theme_cls.accent_color
@@ -112,8 +122,8 @@
                 text: "change theme"
                 size_hint_x: 0.2
 
-                font_size: "20dp"
-                padding: "25dp"
+                font_size: "15dp"
+                padding: "15dp"
                 
                 lnie_width: 2
                 theme_text_color: "Custom"
@@ -124,11 +134,12 @@
             text: "Disconnect"
             on_release: root.disconnect()
             disabled: self.state != "normal"
+            size_hint: [1, 0.1]
             
-            font_size: "25dp"
+            font_size: "20dp"
 
-            padding: "25dp"
-            width: root.width - 60
+            padding: "20dp"
+            width: root.width - 150 
 
             line_width: 2
 

@@ -1,5 +1,5 @@
 import asyncio
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
 
 
@@ -9,7 +9,7 @@ DEVICE_NAME = "Motor Controller"
 class ConnectScreen(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
-        self.app = App.get_running_app()
+        self.app = MDApp.get_running_app()
 
     def on_enter(self, *args):
         print("Entered connect screen")

@@ -9,7 +9,7 @@
             pos: self.pos
             size: self.size
 
-    BoxLayout:
+    MDBoxLayout:
         width: root.width
         height: root.height
         orientation: "vertical"
@@ -43,7 +43,7 @@
             font_size: "25dp"
 
             padding: "35dp"
-            width: root.width - 60
+            width: root.width - 150
 
             line_width: 2
 
@@ -59,7 +59,7 @@
             font_size: "25dp"
 
             padding: "35dp"
-            width: root.width - 60
+            width: root.width - 150
 
             line_width: 2
 
@@ -67,7 +67,7 @@
             text_color: app.theme_cls.text_color
             line_color: app.theme_cls.accent_light if app.theme_cls.theme_style == "Light" else app.theme_cls.accent_dark
 
-        BoxLayout:
+        MDBoxLayout:
             orientation: "horizontal"
             spacing: "30dp"
 
@@ -102,24 +102,28 @@
             size_hint_y: 0.2
             text_color: app.theme_cls.text_color
 
-        MDTextField:
-            id: scan_result
+        MDScrollView:
+            size_hint: [1, 2]
+            size: self.size
 
-            text: "scan results"
+            MDTextField:
+                id: scan_result
 
-            mode: "rectangle"
+                text: "scan results"
 
-            font_size: "15dp"
+                mode: "rectangle"
 
-            padding: "15dp"
-            cursor_width: "2dp"
-            size_hint_y: 2
+                font_size: "25dp"
 
-            multiline: True
-            readonly: True
+                padding: "10dp"
+                cursor_width: "2dp"
+                size_hint_y: None
 
-            halign: "center"
-            valign: "center"
+                multiline: True
+                readonly: True
+
+                halign: "center"
+                valign: "center"
 
         Image:
             source: "media/nordic_logo--light.png" if app.theme_cls.theme_style == "Light" else "media/nordic_logo--dark.png"

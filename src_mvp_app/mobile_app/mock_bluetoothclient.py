@@ -45,7 +45,6 @@ class BluetoothClient:
         self.scanner: BleakScanner = None
         self.wyndka_client: BleakClient = None
         self.wyndka: BLEDevice = None
-        # TODO: make class Template instead of this filthy dicts
         self.template_list: TemplateList
         self.template_config: TemplatConfig
         self.curr_templ: Template

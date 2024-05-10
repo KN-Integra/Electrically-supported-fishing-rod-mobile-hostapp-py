@@ -1,8 +1,9 @@
 import asyncio
 import logging
+import re
 
 from kivy.clock import Clock
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
 from bluetoothclient import BluetoothClient, Template
 from kivy.modules import inspector
@@ -11,12 +12,13 @@ from custom_widgets.components import TemplateButton
 
 
 Window.size = (1080, 2340)
+MAX_NAME_LENGTH = 20
 
 
 class CmdScreen(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
-        self.app = App.get_running_app()
+        self.app = MDApp.get_running_app()
         self.BLEClient: BluetoothClient = self.app.BLEClient
 
     def on_enter(self, *args):
@@ -35,7 +37,7 @@ class CmdScreen(Screen):
 
     def speed_get_callback(self, task):
         self.ids.speed_label.text = "current speed: " + str(task.result())
-        self.ids.speed_label.width = self.width - 60
+        # self.ids.speed_label.width = self.width - 60
 
     def templates_update(self):
         templates_task = asyncio.create_task(self.BLEClient.get_templ_list())
@@ -49,10 +51,13 @@ class CmdScreen(Screen):
     def template_add(self):
         name = self.ids.new_template_name.text
         speed = self.ids.new_template_speed.text
-        templ = Template(name=name, speed=int(speed) if len(speed) > 0 else 0)
-        logging.info(templ)
-        template_add_task = asyncio.create_task(self.BLEClient.create_template(templ))
-        template_add_task.add_done_callback(self.template_add_callback)
+        if self._is_name_valid(name):
+            templ = Template(name=name, speed=self._validate_speed(speed))
+            logging.info(templ)
+            template_add_task = asyncio.create_task(self.BLEClient.create_template(templ))
+            template_add_task.add_done_callback(self.template_add_callback)
+        else:
+            logging.error("Entered an invalid name")
 
     def template_add_callback(self, task):
         # add_button = self.ids.new_template
@@ -67,7 +72,7 @@ class CmdScreen(Screen):
         logging.info("widgets should be cleared")
         templates_grid.bind(minimum_height=templates_grid.setter("height"))
         templates = self.BLEClient.template_list
-        for template in templates:
+        for template in templates.items:
             logging.info(template)
             template_button = TemplateButton(template)
             templates_grid.add_widget(template_button)
@@ -112,3 +117,18 @@ class CmdScreen(Screen):
         # I cannot find the .clear() method in the documentation, but apparently it does work
         # I found it in the O'reilly book about kivy
         # also cannot find the kivy.properties.ObservableList class, which is the type of templates
+
+    def _validate_speed(self, speed: str) -> int:
+        if len(speed) == 0 or int(speed) < 0:
+            return 0
+        elif int(speed) > 62000:
+            return 62000
+        else:
+            return int(speed)
+
+    def _is_name_valid(self, name: str) -> bool:
+        return (
+            len(name) > 0
+            and len(name) < MAX_NAME_LENGTH
+            and bool(re.match("^[a-zA-Z]+$", name))
+        )

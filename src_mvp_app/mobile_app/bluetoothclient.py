@@ -134,9 +134,9 @@ class BluetoothClient:
         self.template_config = TemplatConfig(
             length=sd[0], page_no=sd[1], template_count=sd[2], text_len=sd[3]
         )
-        self.template_list = [
-            self.get_field_data(sd, i, text_len) for i in range(count)
-        ]
+        self.template_list = TemplateList(
+            [self.get_field_data(sd, i, text_len) for i in range(count)]
+        )
 
     async def get_templ_list(self):
         logging.info("Getting speed config data")
